@@ -7,11 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/nalajala9/python-flask.git'
-            }
-        }
         stage('BuildImage') {
             steps {
                 sh 'docker build -t 20152282/${APP_NAME}:${COMMIT_ID} .'
@@ -43,3 +38,12 @@ pipeline {
         }
     }
 }
+
+
+
+
+// stage('Checkout') {
+//             steps {
+//                 git branch: 'main', url: 'https://github.com/nalajala9/python-flask.git'
+//             }
+//         }
