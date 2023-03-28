@@ -27,7 +27,7 @@ pipeline {
                     def deploymentFilePath = 'deployment.yaml'
                     sh 'ls -al'
                     sh "sed 's#20152282/${APP_NAME}:.*#20152282/${APP_NAME}:${COMMIT_ID}#' manifests/${deploymentFilePath}"
-                    sh "cd python-flask && git add ${deploymentFilePath} && git commit -m 'Update deployment to use latest image' && git push"
+                    sh "cd python-flask && git add manifests/${deploymentFilePath} && git commit -m 'Update deployment to use latest image' && git push"
 
                     echo "Commit ID: ${COMMIT_ID}"
                     echo "New Docker Image: 20152282/${APP_NAME}:${COMMIT_ID}"
