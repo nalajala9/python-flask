@@ -25,8 +25,6 @@ pipeline {
                 script {
                     def manifestRepo = 'https://github.com/nalajala9/python-flask.git'
                     def deploymentFilePath = 'deployment.yaml'
-
-                    sh "git clone ${manifestRepo}"
                     sh 'ls -al'
                     sh "sed -i 's/20152282/${APP_NAME}:.*/20152282/${APP_NAME}:${COMMIT_ID}/' /manifests/${deploymentFilePath}"
                     sh "cd python-flask && git add ${deploymentFilePath} && git commit -m 'Update deployment to use latest image' && git push"
