@@ -7,6 +7,11 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/nalajala9/python-flask.git'
+            }
+        }
         stage('BuildImage') {
             steps {
                 sh 'docker build -t 20152282/${APP_NAME}:${COMMIT_ID} .'
@@ -23,16 +28,16 @@ pipeline {
         stage('Update Deployment') {
             steps {
                 script {
-                    def manifestRepo = ''
+                    def manifestRepo = 'https://github.com/nalajala9/python-flask.git'
                     def deploymentFilePath = 'deployment.yaml'
 
-                    sh "git clone ${manifestRepo} manifests"
-                    sh "sed -i 's/20152282/${APP_NAME}:.*/20152282/${APP_NAME}:${COMMIT_ID}|' manifests/${deploymentFilePath}"
-                    sh "cd manifests && git add ${deploymentFilePath} && git commit -m 'Update deployment to use latest image' && git push"
+                    sh "git clone ${manifestRepo}"
+                    sh "sed -i 's/20152282/${APP_NAME}:.*/20152282/${APP_NAME}:${COMMIT_ID}/' ./manifests/${deploymentFilePath}"
+                    sh "cd python-flask && git add ${deploymentFilePath} && git commit -m 'Update deployment to use latest image' && git push"
 
                     echo "Commit ID: ${COMMIT_ID}"
                     echo "New Docker Image: 20152282/${APP_NAME}:${COMMIT_ID}"
-                    echo "Deployment manifest updated in ${manifestRepo}/${deploymentFilePath}"
+                    echo "Deployment manifest updated in ${manifestRepo}/manifests/${deploymentFilePath}"
                 }
             }
         }
