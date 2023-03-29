@@ -27,8 +27,9 @@ pipeline {
                 echo "Image updated succcessfully"
                 sh "git config --global user.name 'nalajala9' && git config --global user.email 'nalajalaravi99@gmail.com'"
                 sh "git add manifests/deployment.yaml && git commit -m 'update deployment to use latest image'"
+                sh "git pull origin master"
                 withCredentials([gitUsernamePassword(credentialsId:'github-credentials',usernameVariable:'GITHUB_USERNAME',passwordVariable:'GITHUB_PASSWORD')]){
-                    sh "git pull origin master && git push origin master"
+                    sh "git push origin master"
                 }
                 echo "Pushed Sucessfully"
             }
