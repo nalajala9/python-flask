@@ -28,7 +28,7 @@ pipeline {
                 sh "git config --global user.name 'nalajala9' && git config --global user.email 'nalajalaravi99@gmail.com'"
                 sh "git add manifests/deployment.yaml && git commit -m 'update deployment to use latest image'"
                 withCredentials([gitUsernamePassword(credentialsId:'github-credentials',usernameVariable:'GITHUB_USERNAME',passwordVariable:'GITHUB_PASSWORD')]){
-                    sh "git push origin master"
+                    sh "git pull && git push origin master"
                 }
                 echo "Pushed Sucessfully"
             }
