@@ -22,17 +22,15 @@ pipeline {
         }
         stage('Update Deployment') {
             steps {
-                script {
-                    def manifestRepo = 'https://github.com/nalajala9/python-flask.git'
-                    def deploymentFilePath = 'deployment.yaml'
-                    sh 'ls -al'
-                    sh "sed 's#20152282/${APP_NAME}:.*#20152282/${APP_NAME}:${COMMIT_ID}#' manifests/${deploymentFilePath}"
-                    sh "git add manifests/${deploymentFilePath} && git commit -m 'Update deployment to use latest image' && git push origin master"
-
-                    echo "Commit ID: ${COMMIT_ID}"
-                    echo "New Docker Image: 20152282/${APP_NAME}:${COMMIT_ID}"
-                    echo "Deployment manifest updated in ${manifestRepo}/manifests/${deploymentFilePath}"
+                sh 'ls -al'
+                sh "sed -i 's#20152282/${APP_NAME}:.*#20152282/${APP_NAME}:${COMMIT_ID}#' manifests/deployment.yaml"
+                echo "Image updated succcessfully"
+                sh "git config --global user.name 'nalajala9' && git config --global user.email 'nalajalaravi99@gmail.com'"
+                sh "git add manifests/deployment.yaml && git commit -m 'update deployment to use latest image'"
+                withCredentials([gitUsernamePassword(credentialsId:'github-credentials',usernameVariable:'GITHUB_USERNAME',passwordVariable:'GITHUB_PASSWORD')]){
+                    sh "git push origin master"
                 }
+                echo "Pushed Sucessfully"
             }
         }
     }
